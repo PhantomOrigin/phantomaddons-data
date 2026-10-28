@@ -10,7 +10,7 @@
 //                   n = name, s = skill ("Combat", "Fishing", ...), rarity 0 = Common … 5 = Mythic
 //   sacks.min.json  { "<SACK_ITEM_ID>": ["<ITEM_ID>", ...] }
 //                   item ids use Hypixel's format for sack counts (INK_SACK:3, not NEU's INK_SACK-3)
-//   mutations.min.json  [ { id, name, rarity } ]
+//   mutations.min.json  [ { id, name, rarity, analyzable? } ]   (analyzable: false for crops the Crop Analyzer skips)
 //                   Greenhouse crops, hand-maintained in data/mutations.json
 //   shas.json       { files: { items, pets, sacks, mutations: sha1 }, built: ISO date, source: commit }
 //

@@ -14,6 +14,7 @@
   {"id": "CREAMBLOOM", "name": "Creambloom", "rarity": "UNCOMMON"},
   {"id": "DUSKBLOOM", "name": "Duskbloom", "rarity": "UNCOMMON"},
   {"id": "THORNSHADE", "name": "Thornshade", "rarity": "UNCOMMON"},
+  {"id": "DEAD_PLANT", "name": "Dead Plant", "rarity": "UNCOMMON", "analyzable": false},
   {"id": "BLASTBERRY", "name": "Blastberry", "rarity": "RARE"},
   {"id": "CHEESEBITE", "name": "Cheesebite", "rarity": "RARE"},
   {"id": "CHLORONITE", "name": "Chloronite", "rarity": "RARE"},

@@ -17,7 +17,7 @@ crop list is maintained by hand in `data/mutations.json`.
 | `items.min.json` | `SKYBLOCK_ID → { n: name, i: item id, d?: damage, t?: skull texture, c?: leather colour, g?: glint, m?: item model }` |
 | `pets.min.json` | `PET_TYPE → { n: name, s: skill, t: { rarityIndex: texture } }` (rarity 0 = Common … 5 = Mythic) |
 | `sacks.min.json` | `SACK_ITEM_ID → [ITEM_ID, …]`, with item ids in Hypixel's sack-count format (`INK_SACK:3`). From NEU's `constants/sacks.json`. |
-| `mutations.min.json` | `[ { id, name, rarity } ]`, the greenhouse crops. From `data/mutations.json`. `id` is the NEU item id; lower-cased it matches the player's `discovered_greenhouse_crops`. |
+| `mutations.min.json` | `[ { id, name, rarity, analyzable? } ]`, the greenhouse crops. From `data/mutations.json`. `analyzable` is only written as `false` (Dead Plant). `id` is the NEU item id; lower-cased it matches the player's `discovered_greenhouse_crops`. |
 | `LICENSE-NEU-REPO` | NEU's MIT licence, which must accompany the processed data. |
 
 When the game adds a greenhouse crop, add it to `data/mutations.json` (the NEU item id must exist for its icon to show) and push.
