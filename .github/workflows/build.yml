@@ -22,10 +22,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch NEU repo (items only)
+      - name: Fetch NEU repo (items and constants only)
         run: |
           git clone --depth 1 --filter=blob:none --sparse https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO.git neu
-          git -C neu sparse-checkout set items
+          git -C neu sparse-checkout set items constants
 
       - uses: actions/setup-node@v4
         with:

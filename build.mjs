@@ -8,7 +8,11 @@
 //                   c = leather colour, g = 1 if enchanted glint, m = vanilla item model override
 //   pets.min.json   { "<PET_TYPE>": { n, s, t: { "<rarityIndex>": texture } } }
 //                   n = name, s = skill ("Combat", "Fishing", ...), rarity 0 = Common … 5 = Mythic
-//   shas.json       { files: { items: sha1, pets: sha1 }, built: ISO date, source: commit }
+//   sacks.min.json  { "<SACK_ITEM_ID>": ["<ITEM_ID>", ...] }
+//                   item ids use Hypixel's format for sack counts (INK_SACK:3, not NEU's INK_SACK-3)
+//   mutations.min.json  [ { id, name, rarity } ]
+//                   Greenhouse crops, hand-maintained in data/mutations.json
+//   shas.json       { files: { items, pets, sacks, mutations: sha1 }, built: ISO date, source: commit }
 //
 // Bad or unusual entries are skipped rather than failing the build.
 
@@ -72,6 +76,19 @@ for (const file of fs.readdirSync(itemsDir)) {
     }
 }
 
+const sacks = {};
+const sackFile = path.join(neuDir, "constants", "sacks.json");
+for (const sack of Object.values(JSON.parse(fs.readFileSync(sackFile, "utf8")).sacks || {})) {
+    if (!sack.item || !Array.isArray(sack.contents) || sack.contents.length === 0) continue;
+    sacks[sack.item] = sack.contents.map(id => id.replace(/-(\d+)$/, ":$1"));
+}
+if (Object.keys(sacks).length === 0) throw new Error("no sacks found in " + sackFile);
+
+const mutations = JSON.parse(fs.readFileSync(new URL("data/mutations.json", import.meta.url), "utf8"));
+for (const m of mutations) {
+    if (!m.id || !m.name || !m.rarity) throw new Error("bad entry in data/mutations.json: " + JSON.stringify(m));
+}
+
 fs.mkdirSync(outDir, { recursive: true });
 const write = (name, data) => {
     const text = JSON.stringify(data);
@@ -88,7 +105,12 @@ try {
 } catch {}
 
 const shas = {
-    files: { items: write("items.min.json", items), pets: write("pets.min.json", pets) },
+    files: {
+        items: write("items.min.json", items),
+        pets: write("pets.min.json", pets),
+        sacks: write("sacks.min.json", sacks),
+        mutations: write("mutations.min.json", mutations),
+    },
     built: new Date().toISOString(),
     source,
 };
@@ -103,7 +125,8 @@ fs.writeFileSync(path.join(outDir, "index.html"),
     "processed from the <a href=\"https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO\">NotEnoughUpdates-REPO</a> " +
     "(MIT, see <a href=\"LICENSE-NEU-REPO\">LICENSE-NEU-REPO</a>).</p>" +
     "<ul><li><a href=\"shas.json\">shas.json</a></li><li><a href=\"items.min.json\">items.min.json</a></li>" +
-    "<li><a href=\"pets.min.json\">pets.min.json</a></li></ul>");
+    "<li><a href=\"pets.min.json\">pets.min.json</a></li><li><a href=\"sacks.min.json\">sacks.min.json</a></li>" +
+    "<li><a href=\"mutations.min.json\">mutations.min.json</a></li></ul>");
 
-console.log(`items: ${Object.keys(items).length}, pets: ${Object.keys(pets).length}, skipped: ${skipped}`);
+console.log(`items: ${Object.keys(items).length}, pets: ${Object.keys(pets).length}, sacks: ${Object.keys(sacks).length}, mutations: ${mutations.length}, skipped: ${skipped}`);
 console.log(`source commit: ${source}`);
